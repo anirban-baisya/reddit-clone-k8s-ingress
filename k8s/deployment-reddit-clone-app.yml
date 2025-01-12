@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-reddit-clone
+  #labels:
+   # app: reddit-clone
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kubernetes-deployment-reddit-clone
+  template:
+    metadata:
+      labels:
+        app: kubernetes-deployment-reddit-clone
+    spec:
+      containers:
+      - name: kubernetes-deployment-reddit-clone
+        image: baisyaanirban/reddit-clone-k8s-ingress:v1
+        ports:
+        - containerPort: 3000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-reddit-clone
+spec:
+  selector:
+    app: kubernetes-deployment-reddit-clone
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 3000  
+  type: LoadBalancer
